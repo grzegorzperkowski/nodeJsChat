@@ -1,0 +1,23 @@
+{
+  "name": "nodejschat",
+  "version": "1.0.0",
+  "description": "test project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grzegorzperkowski/nodeJsChat.git"
+  },
+  "author": "grzegorzperkowski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grzegorzperkowski/nodeJsChat/issues"
+  },
+  "homepage": "https://github.com/grzegorzperkowski/nodeJsChat#readme",
+  "dependencies": {
+    "uuid": "^3.2.1",
+    "websockets": "^0.2.0"
+  }
+}
