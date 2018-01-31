@@ -9,7 +9,7 @@ const uuid = require('uuid')
 var consts = require('./consts')
 
 const PORT = 8080
-const HOST = 'localhost'
+const HOST = ''
 
 var sockets = {}
 var httpServer, wsServer
@@ -77,7 +77,6 @@ function broadCast(data, ignoreId) {
         }
     }
 }
-
 
 wsServer = ws.createServer({
     server: httpServer

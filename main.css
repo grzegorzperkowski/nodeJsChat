@@ -6,9 +6,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
-#messages input {
-    align-items: center
-}
+
 
 #messages {
     list-style: none;
@@ -56,26 +54,17 @@ body {
     text-align: left
 }
 
-#footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    height: 34;
-    background: rgb(90, 231, 34);
-}
-
-input {
-    border: 1px solid #e40909d0;
-    size: 50vmax;
-    padding: 3px;
+footer {
+    display: block;
+    position:fixed;
+    bottom:15px;
+    left:0px;
+    right:0px;
 }
 
 footer input {
-    margin: 0;
-    position: absolute;
-    left: 5x;
-    bottom: 5x;
-    right: 5px;
+    width:100%;
+    margin: 0 20px 0 0;
+    box-shadow: 0 0 8px 9px black;
+    text-align: left;
 }

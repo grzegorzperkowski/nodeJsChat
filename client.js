@@ -39,7 +39,7 @@ app.writeMessage = function (message) {
     li.appendChild(messageDiv)
     const textElement = document.createTextNode(text)
     const fromElement = document.createTextNode(from)
-    if (from && lastCommentsAuthor == from)
+    if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
         fromElement.data = ''
     // else
     // fromElement.data = frameElement.data + ":"
