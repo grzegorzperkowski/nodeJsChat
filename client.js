@@ -35,13 +35,20 @@ app.writeMessage = function (message) {
     timeDiv.innerText = date.getHours() + ":" + date.getMinutes()
     senderSpan.appendChild(timeDiv)
 
+    const fromElement = document.createTextNode(from)
+
+    if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
+        fromElement.data = ''
+    else
+    {
+        let br = document.createElement('hr')
+        li.appendChild(br)
+    }
+
     li.appendChild(senderSpan)
     li.appendChild(messageDiv)
     const textElement = document.createTextNode(text)
-    const fromElement = document.createTextNode(from)
-    if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
-        fromElement.data = ''
-    // else
+
     // fromElement.data = frameElement.data + ":"
 
     senderSpan.appendChild(fromElement)
