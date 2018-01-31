@@ -6,10 +6,12 @@ const INP_SLC = 'footer input'
 const LST_SLC = 'ul#messages'
 
 var inputEl, msgListEl
+let handleClose, handleError, handleMessage, handleOpen;
 
+var lastCommentsAuthor
 
 function getNickFromUrl(url) {
-    return url.substr(url.indexOf("?") + 1).split("&").filter( s => s.startsWith('nick='))[0].split('=')[1]
+    return url.substr(url.indexOf("?") + 1).split("&").filter(s => s.startsWith('nick='))[0].split('=')[1]
 }
 
 
@@ -25,19 +27,27 @@ app.writeMessage = function (message) {
     const from = message.body.from || ''
 
     const li = document.createElement('li')
-    const span = document.createElement('span')
-    const div = document.createElement('div')
+    const senderSpan = document.createElement('span')
+    const messageDiv = document.createElement('div')
+    const timeDiv = document.createElement('div')
 
-    li.appendChild(span)
-    li.appendChild(div)
+    const date = new Date()
+    timeDiv.innerText = date.getHours() + ":" + date.getMinutes()
+    senderSpan.appendChild(timeDiv)
+
+    li.appendChild(senderSpan)
+    li.appendChild(messageDiv)
     const textElement = document.createTextNode(text)
     const fromElement = document.createTextNode(from)
+    if (from && lastCommentsAuthor == from)
+        fromElement.data = ''
+    // else
+    // fromElement.data = frameElement.data + ":"
 
-    if (from) {
-        span.appendChild(fromElement)
-    }
+    senderSpan.appendChild(fromElement)
 
-    div.appendChild(textElement)
+    lastCommentsAuthor = from;
+    messageDiv.appendChild(textElement)
     msgListEl.appendChild(li)
     msgListEl.scrollTop = msgListEl.scrollHeight
 }
@@ -55,34 +65,37 @@ app.sendMessage = function (text) {
     this.writeMessage(message)
 }
 
+const handleKeyUp = function (e) {
+    switch (e.keyCode) {
+        case ENTER:
+            e.preventDefault()
+            const msg = document.getElementById("msgToSend").value
+            app.sendMessage(msg)
+            document.getElementById("msgToSend").value = ''
+            break
+
+        case ESC:
+            e.preventDefault()
+            document.getElementById("msgToSend").value = ''
+    }
+}
+
 app.init = function () {
+    console.log("!!!Loading page!")
     inputEl = document.querySelector(INP_SLC)
     msgListEl = document.querySelector(LST_SLC)
 
-    inputEl.addEventListener('keyup', e => {
-        switch (e.keyCode) {
-            case ENTER:
-                e.preventDefault()
-                const msg = document.getElementById("msgToSend").value
-                app.sendMessage(msg)
-                document.getElementById("msgToSend").value = ''
-                break
-            case ESC:
-                e.preventDefault()
-                document.getElementById("msgToSend").value = ''
-        }
-    })
+    inputEl.addEventListener('keyup', handleKeyUp)
 
     this.connect()
 }
-
 
 app.connect = function () {
     const host = location.host
     this.socket = new WebSocket('ws://' + host)
     this.connecting = true;
 
-    const handleMessage = function (e) {
+    handleMessage = function (e) {
         const msg = JSON.parse(e.data)
         console.log("@@@: " + msg)
         switch (msg.type) {
@@ -94,7 +107,7 @@ app.connect = function () {
     }
     this.socket.addEventListener('message', handleMessage)
 
-    const handleOpen = function () {
+    handleOpen = function () {
         app.connecting = false;
         const toSend = JSON.stringify({
             type: consts.JOIN,
@@ -105,13 +118,13 @@ app.connect = function () {
     }
     this.socket.addEventListener('open', handleOpen)
 
-    const handleClose = function () {
+    handleClose = function () {
         console.log("CLOSE", arguments)
         app.reconnect()
     }
     this.socket.addEventListener('close', handleClose)
 
-    const handleError = function () {
+    handleError = function () {
         console.error("ERROR", arguments)
         app.connecting = false;
     }

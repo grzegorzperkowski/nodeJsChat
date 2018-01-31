@@ -1,13 +1,19 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
+#messages input {
+    align-items: center
+}
+
 #messages {
-    list-style  : none;
-    position    : absolute;
-    overflow    : auto;
+    list-style: none;
+    position: absolute;
+    overflow: auto;
     bottom: 34px;
     left: 0;
     right: 0;
@@ -19,17 +25,35 @@ html, body {
 
 #messages li {
     margin: 0;
-    padding: 0 10%;
+    width: 100vh;
+    padding: 0 10p;
 }
 
 #messages li span {
-font-weight: bolder;
-margin-right: 5px;
+    font-weight: bolder;
+    position: relative;
+    margin-right: 5px;
+    display: inline-block;
+    width: 100px;
+}
+
+#messages li span div {
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+    font-weight: bolder;
+    text-align: center;
+    width: 20px;
+    height: 10px;
+    font-size: 10px;
 }
 
 #messages li div {
-    color: #999;
+    color: rgb(28, 47, 219);
     display: inline;
+    border: #e40909d0;
+    margin: 0 auto;
+    text-align: left
 }
 
 #footer {
@@ -44,6 +68,7 @@ margin-right: 5px;
 
 input {
     border: 1px solid #e40909d0;
+    size: 50vmax;
     padding: 3px;
 }
 
