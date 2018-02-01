@@ -41,15 +41,13 @@ app.writeMessage = function (message) {
         fromElement.data = ''
     else
     {
-        let br = document.createElement('hr')
+        const br = document.createElement('hr')
         li.appendChild(br)
     }
 
     li.appendChild(senderSpan)
     li.appendChild(messageDiv)
     const textElement = document.createTextNode(text)
-
-    // fromElement.data = frameElement.data + ":"
 
     senderSpan.appendChild(fromElement)
 

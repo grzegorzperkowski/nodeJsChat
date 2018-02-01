@@ -63,8 +63,12 @@ footer {
 }
 
 footer input {
-    width:100%;
+    width: -webkit-calc(100% - 100px);
     margin: 0 20px 0 0;
     box-shadow: 0 0 8px 9px black;
     text-align: left;
+}
+
+footer button{
+    width: 70px;
 }
