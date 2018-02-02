@@ -2,16 +2,17 @@
 
 const ENTER = 13
 const ESC = 27
-const INP_SLC = 'footer input'
+const INP_SLC = 'footer textarea'
 const LST_SLC = 'ul#messages'
 
-var inputEl, msgListEl
+let inputEl, msgListEl
 let handleClose, handleError, handleMessage, handleOpen;
-
-var lastCommentsAuthor
+let lastCommentsAuthor
 
 function getNickFromUrl(url) {
-    return url.substr(url.indexOf("?") + 1).split("&").filter(s => s.startsWith('nick='))[0].split('=')[1]
+    var searchParams = new URLSearchParams(url);
+    searchParams.get("nick")
+    return searchParams.get("nick")
 }
 
 
@@ -39,8 +40,7 @@ app.writeMessage = function (message) {
 
     if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
         fromElement.data = ''
-    else
-    {
+    else {
         const br = document.createElement('hr')
         li.appendChild(br)
     }
@@ -57,7 +57,12 @@ app.writeMessage = function (message) {
     msgListEl.scrollTop = msgListEl.scrollHeight
 }
 
-app.sendMessage = function (text) {
+app.sendMessage = function () {
+    const text = document.getElementById("msgToSend").value
+
+    if (text.trim() === '')
+        return;
+
     const message = {
         type: consts.USR_MSG,
         body: {
@@ -68,16 +73,27 @@ app.sendMessage = function (text) {
 
     this.socket.send(JSON.stringify(message))
     this.writeMessage(message)
+    document.getElementById("msgToSend").value = ''
 }
 
+const handleOnKeyDown = function (e) {
+    if (e.keyCode === ENTER && ( e.altKey || e.ctrlKey ) )
+        app.sendMessage()
+}
+
+
 const handleKeyUp = function (e) {
+    if (document.getElementById("msgToSend").value.trim().length > 0)
+        document.getElementById("sendMsgBtn").disabled = false
+    else
+        document.getElementById("sendMsgBtn").disabled = true;
+
     switch (e.keyCode) {
-        case ENTER:
-            e.preventDefault()
-            const msg = document.getElementById("msgToSend").value
-            app.sendMessage(msg)
-            document.getElementById("msgToSend").value = ''
-            break
+        // case ENTER:
+        //     e.preventDefault()
+        //     app.sendMessage(msg)
+        //     document.getElementById("msgToSend").value = ''
+        //     break
 
         case ESC:
             e.preventDefault()
@@ -86,13 +102,13 @@ const handleKeyUp = function (e) {
 }
 
 app.init = function () {
-    console.log("!!!Loading page!")
     inputEl = document.querySelector(INP_SLC)
     msgListEl = document.querySelector(LST_SLC)
 
     inputEl.addEventListener('keyup', handleKeyUp)
+    inputEl.addEventListener('keydown', handleOnKeyDown)
 
-    this.connect()
+    app.connect()
 }
 
 app.connect = function () {

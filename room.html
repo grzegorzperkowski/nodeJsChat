@@ -4,16 +4,18 @@
     <meta charset="utf8" />
     <title>Room</title>
     <script src="consts.js"></script>
-    <script src="client.js"></script>
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
 <body onload="app.init()">
+    <div id="background"></div>
+    <div id "foreground">
     <ul id="messages"></ul>
     <footer>
-        <input type="text" disabled id="msgToSend" />
-        <button type="submit" onclick="javascript: app.sendMessage()" >Send</button>
+        <textarea type="text" disabled id="msgToSend" maxlength="300" minLength="1" rows="3" autofocus placeholder="Type your message here" ></textarea>
+        <button id="sendMsgBtn" disabled onclick="javascript: app.sendMessage()">Send</button>
     </footer>
+</div>
 </body>
 
 </html>

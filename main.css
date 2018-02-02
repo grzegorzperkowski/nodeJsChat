@@ -3,10 +3,22 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+#background
+{
+    opacity: 0.5;
+    background-image: url("http://freedesignfile.com/upload/2014/01/mosaic-background-4.jpg");
+    z-index: 0;
+}
 
+#foreground
+{
+    opacity: 0.5;
+    background-image: url("http://freedesignfile.com/upload/2014/01/mosaic-background-4.jpg");
+    z-index: 1;
+}
 
 #messages {
     list-style: none;
@@ -23,7 +35,7 @@ body {
 
 #messages li {
     margin: 0;
-    width: 100vh;
+    width: 100vw;
     padding: 0 10p;
 }
 
@@ -32,7 +44,7 @@ body {
     position: relative;
     margin-right: 5px;
     display: inline-block;
-    width: 100px;
+    width: 150;
 }
 
 #messages li span div {
@@ -49,26 +61,38 @@ body {
 #messages li div {
     color: rgb(28, 47, 219);
     display: inline;
-    border: #e40909d0;
     margin: 0 auto;
     text-align: left
 }
 
 footer {
     display: block;
-    position:fixed;
-    bottom:15px;
-    left:0px;
-    right:0px;
+    width: 100%;
+    position: fixed;
+    bottom: 15px;
+    left: 0px;
+    right: 0px;
 }
 
-footer input {
-    width: -webkit-calc(100% - 100px);
-    margin: 0 20px 0 0;
+footer textarea {
+    display: block;
+    width: -webkit-calc(100% - 30px);
+    margin-left: 15px;
     box-shadow: 0 0 8px 9px black;
     text-align: left;
+    resize: none;
 }
 
-footer button{
+footer button {
+    position: absolute;
+    height: 26px;
+    bottom: 10px;
+    right: 25px;
     width: 70px;
+}
+
+#grad1 {
+    height: 200px;
+    background-color: #cccccc;
+    background-image: repeating-linear-gradient(red, yellow 10%, green 20%);
 }
