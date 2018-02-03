@@ -31,6 +31,8 @@ app.writeMessage = function (message) {
     const senderSpan = document.createElement('span')
     const messageDiv = document.createElement('div')
     const timeDiv = document.createElement('div')
+    timeDiv.className = 'timeDiv'
+    messageDiv.className = 'messageWindow'
 
     const date = new Date()
     timeDiv.innerText = date.getHours() + ":" + date.getMinutes()
@@ -89,12 +91,6 @@ const handleKeyUp = function (e) {
         document.getElementById("sendMsgBtn").disabled = true;
 
     switch (e.keyCode) {
-        // case ENTER:
-        //     e.preventDefault()
-        //     app.sendMessage(msg)
-        //     document.getElementById("msgToSend").value = ''
-        //     break
-
         case ESC:
             e.preventDefault()
             document.getElementById("msgToSend").value = ''
@@ -118,7 +114,6 @@ app.connect = function () {
 
     handleMessage = function (e) {
         const msg = JSON.parse(e.data)
-        console.log("@@@: " + msg)
         switch (msg.type) {
             case consts.USR_MSG:
             case consts.SYS_MSG:
