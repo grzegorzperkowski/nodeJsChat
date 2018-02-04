@@ -17,16 +17,22 @@ body {
     z-index: 0;
 }
 
-.messageWindow {
+
+.messageWindowDiv {
     border: 1px solid red;
     border-style: ridge;
     border-radius: 5px;
+    margin: 1px;
     max-width:400px;
-    padding-left: 3px;
-    padding-right: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    background: whitesmoke;
+    padding: 2px 15px 2px 5px;
+    background: rgba(238, 229, 229, 0.541);
+    transition: all 0.3s;
+}
+
+.messageWindowDiv:hover {
+border: 2px solid blue;
+background: white;
+margin: 3px;
 }
 
 .timeDiv {
@@ -34,12 +40,7 @@ body {
     font-weight: 100;
 }
 
-#foreground {
-    background-image: url("http://freedesignfile.com/upload/2014/01/mosaic-background-4.jpg");
-    z-index: 1;
-}
-
-#messages {
+#messagesUl {
     list-style: none;
     position: absolute;
     overflow: auto;
@@ -52,13 +53,13 @@ body {
     padding: 0;
 }
 
-#messages li {
+#messagesUl li {
     margin: 10;
     width: 100vw;
     padding: 0 10p;
 }
 
-#messages li span {
+#messagesUl li span {
     font-weight: bolder;
     position: relative;
     margin-right: 5px;
@@ -66,7 +67,7 @@ body {
     width: 150;
 }
 
-#messages li span div {
+#messagesUl li span div {
     position: absolute;
     bottom: 0px;
     right: 20px;
@@ -77,10 +78,9 @@ body {
     font-size: 10px;
 }
 
-#messages li div {
+#messagesUl li div {
     color: rgb(28, 47, 219);
     display: inline;
-    margin: 0 auto;
     text-align: left
 }
 
@@ -88,7 +88,7 @@ footer {
     display: block;
     width: 100%;
     position: fixed;
-    bottom: 15px;
+    bottom: 25px;
     left: 0px;
     right: 0px;
 }

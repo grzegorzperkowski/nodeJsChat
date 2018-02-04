@@ -3,7 +3,7 @@
 const ENTER = 13
 const ESC = 27
 const INP_SLC = 'footer textarea'
-const LST_SLC = 'ul#messages'
+const LST_SLC = 'ul#messagesUl'
 
 let inputEl, msgListEl
 let handleClose, handleError, handleMessage, handleOpen;
@@ -32,7 +32,7 @@ app.writeMessage = function (message) {
     const messageDiv = document.createElement('div')
     const timeDiv = document.createElement('div')
     timeDiv.className = 'timeDiv'
-    messageDiv.className = 'messageWindow'
+    messageDiv.className = 'messageWindowDiv'
 
     const date = new Date()
     timeDiv.innerText = date.getHours() + ":" + date.getMinutes()
@@ -59,6 +59,11 @@ app.writeMessage = function (message) {
     msgListEl.scrollTop = msgListEl.scrollHeight
 }
 
+app.enableDisableChat = function (enable) {
+    inputEl.disabled = !enable
+    document.getElementById("sendMsgBtn").disabled = !enable
+}
+
 app.sendMessage = function () {
     const text = document.getElementById("msgToSend").value
 
@@ -79,7 +84,7 @@ app.sendMessage = function () {
 }
 
 const handleOnKeyDown = function (e) {
-    if (e.keyCode === ENTER && ( e.altKey || e.ctrlKey ) )
+    if (e.keyCode === ENTER && (e.altKey || e.ctrlKey))
         app.sendMessage()
 }
 
@@ -130,18 +135,20 @@ app.connect = function () {
             body: app.me,
         })
         app.socket.send(toSend)
-        inputEl.removeAttribute('disabled')
+        app.enableDisableChat(true)
         document.getElementById('msgToSend').focus()
     }
     this.socket.addEventListener('open', handleOpen)
 
     handleClose = function () {
+        app.enableDisableChat(false)
         console.log("CLOSE", arguments)
         app.reconnect()
     }
     this.socket.addEventListener('close', handleClose)
 
     handleError = function () {
+        app.enableDisableChat(false)
         console.error("ERROR", arguments)
         app.connecting = false;
     }
