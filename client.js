@@ -131,6 +131,7 @@ app.connect = function () {
         })
         app.socket.send(toSend)
         inputEl.removeAttribute('disabled')
+        document.getElementById('msgToSend').focus()
     }
     this.socket.addEventListener('open', handleOpen)
 
