@@ -32,10 +32,12 @@ app.createDivAndAppend = function (className, parent, innerHTML) {
 
 app.writeMessage = function (message) {
     const type = message.type || consts.USR_MSG
-    const text = message.body.text || ''
+    let text = message.body.text || ''
     const from = message.body.from || ''
     const date = new Date()
     const time = date.getHours() + ":" + date.getMinutes()
+
+    text = text.replace( /\n/g, ' <br> ');
 
     const messageEntry = app.createDivAndAppend("messageEntry", msgListEl)
     const senderDiv = app.createDivAndAppend("senderDiv", messageEntry, from)
@@ -51,7 +53,7 @@ app.writeMessage = function (message) {
 
     // li.appendChild(senderSpan)
     // li.appendChild(messageDiv)
-    const textElement = document.createTextNode(text)
+    const textElement = document.createTextNode(message)
 
     // senderSpan.appendChild(fromElement)
 
