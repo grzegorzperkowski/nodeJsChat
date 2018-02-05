@@ -3,7 +3,7 @@
 const ENTER = 13
 const ESC = 27
 const INP_SLC = 'footer textarea'
-const LST_SLC = 'ul#messagesUl'
+const INPUT_ID = 'conversation'
 
 let inputEl, msgListEl
 let handleClose, handleError, handleMessage, handleOpen;
@@ -22,41 +22,43 @@ var app = {
     socket: null,
 }
 
+app.createDivAndAppend = function (className, parent, innerHTML) {
+    const div = document.createElement("div");
+    div.className = className;
+    if (innerHTML !== undefined) div.innerHTML = innerHTML
+    parent.appendChild(div)
+    return div
+}
+
 app.writeMessage = function (message) {
     const type = message.type || consts.USR_MSG
     const text = message.body.text || ''
     const from = message.body.from || ''
-
-    const li = document.createElement('li')
-    const senderSpan = document.createElement('span')
-    const messageDiv = document.createElement('div')
-    const timeDiv = document.createElement('div')
-    timeDiv.className = 'timeDiv'
-    messageDiv.className = 'messageWindowDiv'
-
     const date = new Date()
-    timeDiv.innerText = date.getHours() + ":" + date.getMinutes()
-    senderSpan.appendChild(timeDiv)
+    const time = date.getHours() + ":" + date.getMinutes()
 
-    const fromElement = document.createTextNode(from)
+    const messageEntry = app.createDivAndAppend("messageEntry", msgListEl)
+    const senderDiv = app.createDivAndAppend("senderDiv", messageEntry, from)
+    const timeDiv = app.createDivAndAppend("timeDiv", messageEntry, time)
+    const messageDiv = app.createDivAndAppend("messageDiv", messageEntry, text)
 
-    if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
-        fromElement.data = ''
-    else {
-        const br = document.createElement('hr')
-        li.appendChild(br)
-    }
+    // if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
+    //     fromElement.data = ''
+    // else {
+    //     const br = document.createElement('hr')
+    //     li.appendChild(br)
+    // }
 
-    li.appendChild(senderSpan)
-    li.appendChild(messageDiv)
+    // li.appendChild(senderSpan)
+    // li.appendChild(messageDiv)
     const textElement = document.createTextNode(text)
 
-    senderSpan.appendChild(fromElement)
+    // senderSpan.appendChild(fromElement)
 
-    lastCommentsAuthor = from;
-    messageDiv.appendChild(textElement)
-    msgListEl.appendChild(li)
-    msgListEl.scrollTop = msgListEl.scrollHeight
+    // lastCommentsAuthor = from;
+    // messageDiv.appendChild(textElement)
+    // msgListEl.appendChild(li)
+    // msgListEl.scrollTop = msgListEl.scrollHeight
 }
 
 app.enableDisableChat = function (enable) {
@@ -104,7 +106,7 @@ const handleKeyUp = function (e) {
 
 app.init = function () {
     inputEl = document.querySelector(INP_SLC)
-    msgListEl = document.querySelector(LST_SLC)
+    msgListEl = document.getElementById(INPUT_ID)
 
     inputEl.addEventListener('keyup', handleKeyUp)
     inputEl.addEventListener('keydown', handleOnKeyDown)
