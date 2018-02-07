@@ -22,6 +22,8 @@ body {
 }
 
 .timeDiv {
+    display: flex;
+    align-self: center;
     border-radius: 5px;
     padding: 1em;
     font-size: 9px;

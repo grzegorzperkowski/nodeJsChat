@@ -44,23 +44,7 @@ app.writeMessage = function (message) {
     const timeDiv = app.createDivAndAppend("timeDiv", messageEntry, time)
     const messageDiv = app.createDivAndAppend("messageDiv", messageEntry, text)
 
-    // if (from && lastCommentsAuthor == from && message.type != consts.SYS_MSG)
-    //     fromElement.data = ''
-    // else {
-    //     const br = document.createElement('hr')
-    //     li.appendChild(br)
-    // }
-
-    // li.appendChild(senderSpan)
-    // li.appendChild(messageDiv)
     const textElement = document.createTextNode(message)
-
-    // senderSpan.appendChild(fromElement)
-
-    // lastCommentsAuthor = from;
-    // messageDiv.appendChild(textElement)
-    // msgListEl.appendChild(li)
-    // msgListEl.scrollTop = msgListEl.scrollHeight
 }
 
 app.enableDisableChat = function (enable) {
