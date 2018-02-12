@@ -32,8 +32,8 @@ app.createDivAndAppend = function (className, parent, innerHTML) {
 
 app.writeMessage = function (message) {
     const type = message.type || consts.USR_MSG
-    let text = message.body.text || ''
-    const from = message.body.from || ''
+    let text = message.body.message || ''
+    const from = message.body.author || ''
     const date = new Date()
     const time = date.getHours() + ":" + date.getMinutes()
 
@@ -61,8 +61,8 @@ app.sendMessage = function () {
     const message = {
         type: consts.USR_MSG,
         body: {
-            text: text,
-            from: this.me
+            message: text,
+            author: this.me
         }
     }
 
@@ -119,8 +119,9 @@ app.connect = function () {
     handleOpen = function () {
         app.connecting = false;
         const toSend = JSON.stringify({
-            type: consts.JOIN,
-            body: app.me,
+            type: consts.JOIN,body: {
+            author: '',
+            message: ''},
         })
         app.socket.send(toSend)
         app.enableDisableChat(true)
