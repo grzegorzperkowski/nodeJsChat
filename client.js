@@ -37,7 +37,7 @@ app.writeMessage = function (message) {
     const date = new Date()
     const time = date.getHours() + ":" + date.getMinutes()
 
-    text = text.replace( /\n/g, ' <br> ');
+    text = text.replace(/\n/g, ' <br> ');
 
     const messageEntry = app.createDivAndAppend("messageEntry", msgListEl)
     const senderDiv = app.createDivAndAppend("senderDiv", messageEntry, from)
@@ -119,9 +119,10 @@ app.connect = function () {
     handleOpen = function () {
         app.connecting = false;
         const toSend = JSON.stringify({
-            type: consts.JOIN,body: {
-            author: '',
-            message: ''},
+            type: consts.SYS_MSG, body: {
+                author: this.me,
+                message: ''
+            },
         })
         app.socket.send(toSend)
         app.enableDisableChat(true)

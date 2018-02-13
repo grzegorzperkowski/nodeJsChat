@@ -46,15 +46,37 @@ function GetContentType(name) {
 function writeMsgToDB(messageType, message, author) {
     if (!chatDB) return
 
-    const chatEntry = { type: messageType, message: message, author: author, date: new Date(),}
+    const chatEntry = { type: messageType, message: message, author: author, date: new Date(), }
     chatDB.collection("chatHistory").insertOne(chatEntry, function (err, res) {
         if (err) {
             console.error("Unable to write history: " + err)
             return
         }
-
         console.info(res);
     })
+}
+
+function sendLastMessagesFromDB(clientId) {
+    if (!chatDB) return
+
+    const lastRecords = chatDB.collection("chatHistory").find({ "type": { $eq: consts.USR_MSG } }).limit(10).sort('date')
+    if (!lastRecords) return
+    lastRecords.on("error", e => console.error("@@@ERROR: " + e))
+    lastRecords.on("data", data => {
+        if (data)
+            sendMessagesToClient(
+                {
+                    type: data.type,
+                    body:
+                        {
+                            message: data.message,
+                            time: data.time,
+                            author: data.author
+                        }
+                }
+                , clientId)
+    })
+
 }
 
 httpServer = http.createServer(function (req, res) {
@@ -98,6 +120,17 @@ function broadCast(data, ignoreId) {
     }
 }
 
+function sendMessagesToClient(data, clientId) {
+    if (typeof data != 'string') {
+        data = JSON.stringify(data)
+    }
+
+    const client = sockets[clientId]
+    if (client) {
+        client.send(data)
+    }
+}
+
 wsServer = ws.createServer({
     server: httpServer
 })
@@ -108,13 +141,12 @@ wsServer.on('connect', function (socket) {
     console.log("New socket: " + id)
     socket.on('message', function (data) {
         const message = JSON.parse(data);
-        console.log("A new message arrived. type: " + message.type + ", message: " + message.body.message )
-        const date = new Date()
+        console.log("A new message arrived. type: " + message.type + ", message: " + message.body.message)
 
         writeMsgToDB(message.type, message.body.message, message.body.author)
 
         switch (message.type) {
-            case consts.JOIN:
+            case consts.SYS_MSG:
                 const nick = message.body.author;
                 console.log("Join: " + nick)
                 broadCast({
@@ -123,6 +155,7 @@ wsServer.on('connect', function (socket) {
                         text: nick + ' dołączył do pokoju'
                     }
                 }, id)
+                sendLastMessagesFromDB(id)
                 break;
             case consts.USR_MSG:
                 broadCast(data, id)
