@@ -34,8 +34,10 @@ app.writeMessage = function (message) {
     const type = message.type || consts.USR_MSG
     let text = message.body.message || ''
     const from = message.body.author || ''
-    const date = new Date()
-    const time = date.getHours() + ":" + date.getMinutes()
+    const msgDate = new Date(message.body.date)
+    const now = new Date()
+    const time =  ('0'+msgDate.getHours()).slice(-2) + ":" + ('0'+msgDate.getMinutes()).slice(-2) +
+    (now.getDay()!=msgDate.getDay()?('\n' + ('0'+msgDate.getDate()).slice(-2) + '-' + ('0'+msgDate.getMonth()).slice(-2)) : '')
 
     text = text.replace(/\n/g, ' <br> ');
 
@@ -58,11 +60,12 @@ app.sendMessage = function () {
     if (text.trim() === '')
         return;
 
-    const message = {
+    var message = {
         type: consts.USR_MSG,
         body: {
             message: text,
-            author: this.me
+            author: this.me,
+            date: new Date()
         }
     }
 

@@ -14,8 +14,8 @@ const mongo = require('mongodb')
 const databaseUrl = 'mongodb://localhost:27017/chat'
 var sockets = {}
 var httpServer, wsServer
-
 var chatDB
+
 mongo.connect(databaseUrl, function (err, client) {
     if (err) throw err
     try {
@@ -59,7 +59,7 @@ function writeMsgToDB(messageType, message, author) {
 function sendLastMessagesFromDB(clientId) {
     if (!chatDB) return
 
-    const lastRecords = chatDB.collection("chatHistory").find({ "type": { $eq: consts.USR_MSG } }).limit(10).sort('date')
+    const lastRecords = chatDB.collection("chatHistory").find({ type: { $eq: consts.USR_MSG } }).limit(10).sort('date')
     if (!lastRecords) return
     lastRecords.on("error", e => console.error("@@@ERROR: " + e))
     lastRecords.on("data", data => {
@@ -70,7 +70,7 @@ function sendLastMessagesFromDB(clientId) {
                     body:
                         {
                             message: data.message,
-                            time: data.time,
+                            date: data.date,
                             author: data.author
                         }
                 }
@@ -168,3 +168,5 @@ wsServer.on('connect', function (socket) {
         delete socket[id]
     })
 }).listen(PORT, HOST, () => console.log("Server is running on port: " + PORT))
+
+process.on('beforeExit', ()=>{if(chatDB)chatDB.close().wait()})

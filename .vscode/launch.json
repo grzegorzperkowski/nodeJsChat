@@ -10,6 +10,10 @@
        {
           "type":"chrome",
           "request":"launch",
+          "sourceMaps": true,
+          "sourceMapPathOverrides": {
+            "/source/*": "${workspaceFolder}/*"
+        },
           "name":"Chrome",
           "url": "http://localhost:8080",
        }
