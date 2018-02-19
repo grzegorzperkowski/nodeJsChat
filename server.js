@@ -49,7 +49,7 @@ function writeMsgToDB(messageType, message, author) {
     const chatEntry = { type: messageType, message: message, author: author, date: new Date(), }
     chatDB.collection("chatHistory").insertOne(chatEntry, function (err, res) {
         if (err) {
-            console.error("Unable to write history: " + err)
+            console.error("Unable to write message entry to history: " + err)
             return
         }
         console.info(res);
@@ -61,7 +61,6 @@ function sendLastMessagesFromDB(clientId) {
 
     const lastRecords = chatDB.collection("chatHistory").find({ type: { $eq: consts.USR_MSG } }).limit(10).sort('date')
     if (!lastRecords) return
-    lastRecords.on("error", e => console.error("@@@ERROR: " + e))
     lastRecords.on("data", data => {
         if (data)
             sendMessagesToClient(
@@ -152,7 +151,9 @@ wsServer.on('connect', function (socket) {
                 broadCast({
                     type: consts.SYS_MSG,
                     body: {
-                        text: nick + ' dołączył do pokoju'
+                        author: nick,
+                        message: nick + ' has joined the room',
+                        date: new Date()
                     }
                 }, id)
                 sendLastMessagesFromDB(id)
@@ -169,4 +170,11 @@ wsServer.on('connect', function (socket) {
     })
 }).listen(PORT, HOST, () => console.log("Server is running on port: " + PORT))
 
-process.on('beforeExit', ()=>{if(chatDB)chatDB.close().wait()})
+process.on('beforeExit', () => { if (chatDB) chatDB.close().wait() })
+process.on('unhandledRejection', (reason, p) => console.log("Unhandled rejection: " + reason))
+process.on('uncaughtException', (err) => console.error("Uncaught exception : " + err))
+process.on('warning', (warning)=> {
+    console.warn(warning.name);    // Print the warning name
+    console.warn(warning.message); // Print the warning message
+    console.warn(warning.stack);   // Print the stack trace
+} )

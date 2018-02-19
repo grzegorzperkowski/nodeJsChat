@@ -20,6 +20,8 @@ body {
 
 .senderDiv {
     padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .timeDiv {
@@ -78,10 +80,4 @@ footer button {
     bottom: 10px;
     right: 25px;
     width: 70px;
-}
-
-#grad1 {
-    height: 200px;
-    background-color: #cccccc;
-    background-image: repeating-linear-gradient(red, yellow 10%, green 20%);
 }

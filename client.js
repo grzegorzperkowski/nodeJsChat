@@ -22,10 +22,18 @@ var app = {
     socket: null,
 }
 
-app.createDivAndAppend = function (className, parent, innerHTML) {
+app.createDivAndAppend = function (className, parent, innerHTML, title) {
     const div = document.createElement("div");
     div.className = className;
-    if (innerHTML !== undefined) div.innerHTML = innerHTML
+    if (innerHTML !== undefined) {
+        div.innerHTML = innerHTML
+    }
+
+    if (title !== undefined) {
+        div.title = title
+    }
+
+
     parent.appendChild(div)
     return div
 }
@@ -36,14 +44,14 @@ app.writeMessage = function (message) {
     const from = message.body.author || ''
     const msgDate = new Date(message.body.date)
     const now = new Date()
-    const time =  ('0'+msgDate.getHours()).slice(-2) + ":" + ('0'+msgDate.getMinutes()).slice(-2) +
-    (now.getDay()!=msgDate.getDay()?('\n' + ('0'+msgDate.getDate()).slice(-2) + '-' + ('0'+msgDate.getMonth()).slice(-2)) : '')
+    const shortTime = ('0' + msgDate.getHours()).slice(-2) + ":" + ('0' + msgDate.getMinutes()).slice(-2) +
+        (now.getDay() != msgDate.getDay() ? ('\n' + ('0' + msgDate.getDate()).slice(-2) + '-' + ('0' + msgDate.getMonth()).slice(-2)) : '')
 
     text = text.replace(/\n/g, ' <br> ');
 
     const messageEntry = app.createDivAndAppend("messageEntry", msgListEl)
-    const senderDiv = app.createDivAndAppend("senderDiv", messageEntry, from)
-    const timeDiv = app.createDivAndAppend("timeDiv", messageEntry, time)
+    const senderDiv = app.createDivAndAppend("senderDiv", messageEntry, from, from)
+    const timeDiv = app.createDivAndAppend("timeDiv", messageEntry, shortTime,  now)
     const messageDiv = app.createDivAndAppend("messageDiv", messageEntry, text)
 
     const textElement = document.createTextNode(message)
@@ -122,9 +130,10 @@ app.connect = function () {
     handleOpen = function () {
         app.connecting = false;
         const toSend = JSON.stringify({
-            type: consts.SYS_MSG, body: {
-                author: this.me,
-                message: ''
+            type: consts.SYS_MSG,
+            body: {
+                author: app.me,
+                date: new Date()
             },
         })
         app.socket.send(toSend)
